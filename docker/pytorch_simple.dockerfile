@@ -12,3 +12,6 @@ RUN yes "Y" | /tmp/install_pytorch.sh
 
 COPY ./install_more.sh /tmp/install_more.sh
 RUN yes "Y" | /tmp/install_more.sh
+
+COPY ./install_atom.sh /tmp/install_atom.sh
+RUN yes "Y" | /tmp/install_atom.sh
