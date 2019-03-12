@@ -2,6 +2,7 @@ from __future__ import print_function
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import torch.optim as optim
 
 # let us run this cell only if CUDA is available
 # We will use ``torch.device`` objects to move tensors in and out of GPU
@@ -44,7 +45,27 @@ if torch.cuda.is_available():
     #y = torch.ones_like(x, device=device)  # directly create a tensor on GPU
 
 input = torch.randn(1,1,32,32,device=device)
+
 net = Net()
 net.cuda()
 out = net(input)
-print(out)
+
+#create #optimizer
+optimizer = optim.SGD(net.parameters(), lr=0.01)
+optimizer.zero_grad()
+
+#compute loss
+target = torch.randn(10,device=device)
+target = target.view(1,-1)
+criterion = nn.MSELoss()
+loss = criterion(out,target)
+
+#back prop
+net.zero_grad()
+loss.backward()
+
+#update network
+optimizer.step()
+
+
+#print(loss)
