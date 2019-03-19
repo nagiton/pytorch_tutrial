@@ -6,6 +6,7 @@ import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+import tensorboardX as tbx
 
 import os
 
@@ -55,7 +56,10 @@ if torch.cuda.is_available():
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
-for epoch in range(2):  # loop over the dataset multiple times
+#tbx
+writer = tbx.SummaryWriter("runs/exp-1")
+
+for epoch in range(5):  # loop over the dataset multiple times
 
     running_loss = 0.0
     for i, data in enumerate(trainloader, 0):
@@ -77,8 +81,17 @@ for epoch in range(2):  # loop over the dataset multiple times
             print('[%d, %5d] loss: %.3f' %
                   (epoch + 1, i + 1, running_loss / 2000))
             running_loss = 0.0
+        if i % 100 == 99:
+            n_iter = (i+1)*(epoch + 1)
+            writer.add_scalar("group/epoch", loss.item(), n_iter)
+
+            for name, param in net.named_parameters():
+                writer.add_histogram(name, param.clone().cpu().data.numpy(), n_iter)
+
+
 
 print('Finished Training')
+writer.close()
 
 correct = 0
 total = 0
