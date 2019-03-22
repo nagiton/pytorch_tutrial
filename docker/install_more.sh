@@ -9,6 +9,7 @@ sudo pip install imageio
 
 sudo pip install scikit-image
 sudo pip install tensorboard
+sudo pip install tensorboardX
 
 sudo pip install sklearn
 
@@ -19,3 +20,5 @@ sudo pip install tensorboard_logger \
 
 sudo apt install python-tk \
     ffmpeg
+    
+sudo pip install adabound
